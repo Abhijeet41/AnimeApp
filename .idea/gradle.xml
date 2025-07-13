@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
@@ -9,7 +10,16 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/anime" />
+            <option value="$PROJECT_DIR$/anime/data" />
+            <option value="$PROJECT_DIR$/anime/domain" />
+            <option value="$PROJECT_DIR$/anime/presentation" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/core-network" />
+            <option value="$PROJECT_DIR$/planet" />
+            <option value="$PROJECT_DIR$/planet/data" />
+            <option value="$PROJECT_DIR$/planet/domain" />
+            <option value="$PROJECT_DIR$/planet/presentation" />
           </set>
         </option>
       </GradleProjectSettings>
