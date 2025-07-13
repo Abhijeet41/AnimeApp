@@ -6,8 +6,6 @@ import com.google.gson.annotations.SerializedName
 data class CharectorDetailsResponse(
     @SerializedName("affiliation")
     val affiliation: String,
-    @SerializedName("deletedAt")
-    val deletedAt: Any,
     @SerializedName("description")
     val description: String,
     @SerializedName("gender")
@@ -23,9 +21,9 @@ data class CharectorDetailsResponse(
     @SerializedName("name")
     val name: String,
     @SerializedName("originPlanet")
-    val originPlanet: OriginPlanet,
+    val originPlanet: OriginPlanetDto,
     @SerializedName("race")
     val race: String,
     @SerializedName("transformations")
-    val transformations: List<Transformation>
+    val transformations: List<TransformationDto>
 )

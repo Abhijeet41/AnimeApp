@@ -6,8 +6,6 @@ import com.google.gson.annotations.SerializedName
 data class CharectorDto(
     @SerializedName("affiliation")
     val affiliation: String,
-    @SerializedName("deletedAt")
-    val deletedAt: Any,
     @SerializedName("description")
     val description: String,
     @SerializedName("gender")

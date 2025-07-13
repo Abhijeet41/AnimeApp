@@ -3,7 +3,7 @@ package com.abhi41.planet.core_network.dtos.charectorDetails
 
 import com.google.gson.annotations.SerializedName
 
-data class OriginPlanet(
+data class OriginPlanetDto(
     @SerializedName("deletedAt")
     val deletedAt: Any,
     @SerializedName("description")

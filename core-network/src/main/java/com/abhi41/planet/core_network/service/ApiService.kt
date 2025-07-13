@@ -16,7 +16,7 @@ interface ApiService {
 
     //https://dragonball-api.com/api/characters/1
     @GET("api/characters/{id}")
-    suspend fun getCharacterDetails(
+    suspend fun getCharecterDetails(
         @Path("id") id: Int
     ): CharectorDetailsResponse
 
