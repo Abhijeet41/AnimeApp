@@ -1,10 +1,10 @@
 package com.abhi41.anime.domain.repository
 
-import com.abhi41.anime.domain.models.Charecter
-import com.abhi41.anime.domain.models.CharecterDetails
+import com.abhi41.anime.domain.models.Character
+import com.abhi41.anime.domain.models.CharacterDetails
 
 interface AnimeRepository {
-    suspend fun getCharecters(): Result<List<Charecter>>
-    suspend fun getCharecterDetails(id: Int): Result<CharecterDetails>
+    suspend fun getCharecters(): Result<List<Character>>
+    suspend fun getCharecterDetails(id: Int): Result<CharacterDetails>
 
 }

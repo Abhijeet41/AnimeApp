@@ -1,7 +1,7 @@
 package com.abhi41.anime.data.mappers
 
-import com.abhi41.anime.domain.models.Charecter
-import com.abhi41.anime.domain.models.CharecterDetails
+import com.abhi41.anime.domain.models.Character
+import com.abhi41.anime.domain.models.CharacterDetails
 import com.abhi41.anime.domain.models.OriginPlanet
 import com.abhi41.anime.domain.models.Transformation
 import com.abhi41.planet.core_network.dtos.characters.CharectorDto
@@ -9,9 +9,9 @@ import com.abhi41.planet.core_network.dtos.charectorDetails.CharectorDetailsResp
 import com.abhi41.planet.core_network.dtos.charectorDetails.OriginPlanetDto
 import com.abhi41.planet.core_network.dtos.charectorDetails.TransformationDto
 
-fun List<CharectorDto>.toCharecters(): List<Charecter> {
+fun List<CharectorDto>.toDomainCharecters(): List<Character> {
    return map {
-        Charecter(
+        Character(
             id = it.id,
             name = it.name,
             image = it.image
@@ -19,8 +19,8 @@ fun List<CharectorDto>.toCharecters(): List<Charecter> {
     }
 }
 
-fun CharectorDetailsResponse.toDomain(): CharecterDetails{
-    return CharecterDetails(
+fun CharectorDetailsResponse.toDomainCharacterDetails(): CharacterDetails{
+    return CharacterDetails(
         affiliation = affiliation,
         description = description,
         gender = gender,
@@ -29,13 +29,13 @@ fun CharectorDetailsResponse.toDomain(): CharecterDetails{
         ki = ki,
         maxKi = maxKi,
         name = name,
-        originPlanet = originPlanet.toDomain(),
+        originPlanet = originPlanet.toDomainOriginPlanet(),
         race = race,
-        transformations = transformations.toDomain()
+        transformations = transformations.toDomainTransformation()
     )
 }
 
-fun OriginPlanetDto.toDomain(): OriginPlanet {
+fun OriginPlanetDto.toDomainOriginPlanet(): OriginPlanet {
     return OriginPlanet(
         id = id,
         name = name,
@@ -44,7 +44,7 @@ fun OriginPlanetDto.toDomain(): OriginPlanet {
     )
 }
 
-fun List<TransformationDto>.toDomain(): List<Transformation> {
+fun List<TransformationDto>.toDomainTransformation(): List<Transformation> {
     return map {
         Transformation(
             id = it.id,

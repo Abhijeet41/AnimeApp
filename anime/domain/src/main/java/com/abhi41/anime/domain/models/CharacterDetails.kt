@@ -1,6 +1,6 @@
 package com.abhi41.anime.domain.models
 
-data class CharecterDetails(
+data class CharacterDetails(
     val affiliation: String,
     val description: String,
     val gender: String,
