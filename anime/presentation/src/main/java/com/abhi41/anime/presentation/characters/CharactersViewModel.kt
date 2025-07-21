@@ -21,7 +21,7 @@ class CharactersViewModel  @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
 
-    fun getAllCharacters() {
+     fun getAllCharacters() {
         getAllCharactersUseCase.invoke().onStart {
             _uiState.update { it.copy(isLoading = true) }
         }.onEach { result ->

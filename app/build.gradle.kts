@@ -2,7 +2,10 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-
+    alias(libs.plugins.dagger.hilt )
+    kotlin("kapt")
+    alias(libs.plugins.kotlin.serialization)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -42,6 +45,22 @@ android {
 
 dependencies {
 
+    implementation(project(":core-network"))
+    implementation(project(":anime:domain"))
+    implementation(project(":anime:data"))
+    implementation(project(":anime:presentation"))
+    implementation(project(":planet:domain"))
+    implementation(project(":planet:data"))
+    implementation(project(":planet:presentation"))
+
+    implementation(libs.hilt.android)
+    kapt (libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+
+    implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
+
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -50,6 +69,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

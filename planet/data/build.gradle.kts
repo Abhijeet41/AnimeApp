@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.dagger.hilt )
+    kotlin("kapt")
 }
 
 android {
@@ -33,6 +35,18 @@ android {
 }
 
 dependencies {
+
+    implementation(project(":core-network"))
+    implementation(project(":planet:domain"))
+
+    implementation(libs.hilt.android)
+    kapt (libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

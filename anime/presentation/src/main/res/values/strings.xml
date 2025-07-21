@@ -1,3 +1,7 @@
 <resources>
     <string name="title_activity_main">MainActivity</string>
+    <string name="transformations">Transformations</string>
+    <string name="planet_information">Planet Information</string>
+    <string name="anime_characters">Anime Characters</string>
+    <string name="see_all_characters">See All Characters</string>
 </resources>
