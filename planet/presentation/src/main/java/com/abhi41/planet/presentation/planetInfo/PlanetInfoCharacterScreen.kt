@@ -47,7 +47,7 @@ private const val ANIMATION_DURATION_ONE_SEC = 1000
 @Composable
 fun PlanetInfoCharacterScreen(
     id: Int,
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     onClick: (Int) -> Unit,
     onBackClick: () -> Unit
 ) {

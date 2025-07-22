@@ -40,7 +40,6 @@ class MainActivity : ComponentActivity() {
                         ).forEach {
                             it.build(
                                 modifier = Modifier
-                                    .padding(innerPadding)
                                     .fillMaxSize(),
                                 navHostController = navController,
                                 navGraphBuilder = this
