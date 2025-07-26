@@ -3,6 +3,7 @@
 A multi‑module Jetpack Compose Android application following Clean Architecture and Single Source of Truth principle.
 Features Room Database + Paging 3 for offline‑first data loading and Hilt for dependency injection.
 
+```
 AnimeApp/
 │
 ├── app/                      # Main application module (navigation, DI entry point)
@@ -41,6 +42,8 @@ AnimeApp/
 │   │
 │   └── presentation/
 │       └── planetInfo/       # Screens + ViewModels for planet feature
+
+```
 
 ### 🛠 Tech Stack
 
