@@ -1,6 +1,7 @@
 package com.abhi41.anime.domain.useCases
 
 import com.abhi41.anime.domain.models.Character
+import com.abhi41.anime.domain.models.CharactersResp
 import com.abhi41.anime.domain.repository.AnimeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -16,5 +17,13 @@ class GetAllCharactersUseCase @Inject constructor(
     }.catch {
         emit(Result.failure(it))
     }.flowOn(Dispatchers.IO)
+
+    operator fun invoke(page: Int) = flow<Result<CharactersResp>> {
+
+        emit(animeRepository.getAllCharactersByPage(limit = 10,page = page))
+    }.catch {
+        emit(Result.failure(it))
+
+    }
 
 }

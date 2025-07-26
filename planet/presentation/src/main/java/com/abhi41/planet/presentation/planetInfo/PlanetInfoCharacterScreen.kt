@@ -77,7 +77,7 @@ fun PlanetInfoCharacterScreenContent(
     Scaffold(modifier = modifier.fillMaxSize(), topBar = {
         TopAppBar(
             title = {
-                if (uiState.planetInfo != null){
+                if (!uiState.planetInfo?.name.isNullOrEmpty()){
                     Text(text = uiState.planetInfo.name)
                 }
             },

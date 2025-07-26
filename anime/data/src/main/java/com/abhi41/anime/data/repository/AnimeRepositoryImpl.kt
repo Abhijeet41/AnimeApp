@@ -1,16 +1,18 @@
 package com.abhi41.anime.data.repository
 
 import com.abhi41.anime.data.mappers.toDomainCharacterDetails
+import com.abhi41.anime.data.mappers.toDomainCharecterResp
 import com.abhi41.anime.data.mappers.toDomainCharecters
 import com.abhi41.anime.domain.models.Character
 import com.abhi41.anime.domain.models.CharacterDetails
+import com.abhi41.anime.domain.models.CharactersResp
 import com.abhi41.anime.domain.repository.AnimeRepository
+import com.abhi41.planet.core_network.dtos.characters.CharactersResponse
 import com.abhi41.planet.core_network.service.ApiService
 
 class AnimeRepositoryImpl(
     private val apiService: ApiService
-) : AnimeRepository
-{
+) : AnimeRepository {
     override suspend fun getCharecters(): Result<List<Character>> {
         try {
             val result = apiService.getAllCharacters(limit = 60)
@@ -26,9 +28,23 @@ class AnimeRepositoryImpl(
             val result = apiService.getCharecterDetails(id)
             val response = result.toDomainCharacterDetails()
             return Result.success(response)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             return Result.failure(e)
         }
     }
+
+    override suspend fun getAllCharactersByPage(
+        limit: Int,
+        page: Int
+    ): Result<CharactersResp> {
+        try {
+            val result = apiService.getAllCharactersByPage(limit = 10, page = page)
+            val response = result.toDomainCharecterResp()
+            return Result.success(response)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
+
 
 }

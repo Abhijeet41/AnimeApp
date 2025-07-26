@@ -14,6 +14,12 @@ interface ApiService {
         @Query("limit") limit: Int = 60
     ): CharactersResponse
 
+    @GET("api/characters")
+    suspend fun getAllCharactersByPage(
+        @Query("limit") limit: Int = 10,
+        @Query("page") page: Int
+    ): CharactersResponse
+
     //https://dragonball-api.com/api/characters/1
     @GET("api/characters/{id}")
     suspend fun getCharecterDetails(
