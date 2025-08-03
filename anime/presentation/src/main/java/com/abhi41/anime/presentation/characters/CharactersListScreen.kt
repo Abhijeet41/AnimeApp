@@ -9,34 +9,44 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.abhi41.anime.domain.models.Character
 import com.abhi41.anime.presentation.components.CharacterItem
 
 @Composable
-fun CharacterListScreen(modifier: Modifier = Modifier, onClick: (Int) -> Unit) {
+fun CharacterListScreen(
+    modifier: Modifier = Modifier,
+    onClick: (Int) -> Unit
+) {
+
     val viewModel: CharactersViewModel = hiltViewModel<CharactersViewModel>()
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        viewModel.getAllCharacters()
-    }
+
+ /*   LaunchedEffect(Unit) {
+        // viewModel.getAllCharacters()
+        viewModel.getPagedCharacters()
+    }*/
     CharacterListScreenContent(
         modifier = modifier.fillMaxSize(),
         uiState = uiState.value,
@@ -52,10 +62,10 @@ fun CharacterListScreenContent(
     uiState: CharactersState,
     onClick: (Int) -> Unit
 ) {
-
+    val characters = uiState.charactersUsingPaging.collectAsLazyPagingItems()
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 title = { Text(text = "Anime Characters") },
@@ -66,7 +76,7 @@ fun CharacterListScreenContent(
 
         //handle animation for ProgressBar (uiState.isLoading)
         AnimatedVisibility(
-            visible = uiState.isLoading,
+            visible = characters.loadState.refresh is LoadState.Loading,
             enter = fadeIn(tween(delayMillis = 1000)),
             exit = fadeOut(tween(delayMillis = 1000))
         ) {
@@ -82,7 +92,7 @@ fun CharacterListScreenContent(
 
         //handle animation for Error message (uiState.error)
         AnimatedVisibility(
-            visible = uiState.error.isNotBlank(),
+            visible = characters.loadState.refresh is LoadState.Error,
             enter = fadeIn(tween(delayMillis = 1000)),
             exit = fadeOut(tween(delayMillis = 1000))
         ) {
@@ -96,7 +106,61 @@ fun CharacterListScreenContent(
             }
         }
 
+
         AnimatedVisibility(
+            visible = characters.itemCount > 0,
+            enter = slideInVertically(tween(delayMillis = 1000)) { it } + fadeIn(tween(1000)),
+            exit = slideOutVertically(tween(1000)) + fadeOut(tween(1000))
+        ) {
+            /*    Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {*/
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Fixed(2),
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize(),
+            ) {
+                items(characters.itemCount) { index ->
+                    characters[index]?.let { character ->
+                        CharacterItem(
+                            character = character,
+                            onClick = onClick
+                        )
+                    }
+                }
+                item(span = StaggeredGridItemSpan.FullLine) {
+                    when (characters.loadState.append) {
+                        is LoadState.Error -> Unit
+                        LoadState.Loading ->
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                AnimatedVisibility(
+                                    visible = characters.loadState.append is LoadState.Loading,
+                                    enter = fadeIn(tween(delayMillis = 1000)),
+                                    exit = fadeOut(tween(delayMillis = 1000)),
+                                    modifier = Modifier
+                                        .align(Alignment.BottomCenter) // <-- Important
+                                        .padding(16.dp)
+                                ) {
+                                    LoaderForPaging()
+                                }
+                            }
+
+                        is LoadState.NotLoading -> Unit
+                    }
+                }
+
+            }
+
+            // }
+
+        }
+        /*AnimatedVisibility(
             visible = uiState.characters.isNotEmpty(),
             enter = slideInVertically(tween(delayMillis = 1000)) { it }
                     + fadeIn(tween(1000)),
@@ -118,11 +182,24 @@ fun CharacterListScreenContent(
                     }
                 }
             }
-        }
+        }*/
 
     }
 
 
+}
+
+@Composable
+private fun LoaderForPaging() {
+
+    CircularProgressIndicator(
+        modifier = Modifier
+            .width(42.dp)
+            .height(42.dp)
+            .padding(8.dp),
+        strokeWidth = 5.dp,
+        color = Color.Blue
+    )
 }
 
 
@@ -138,6 +215,11 @@ private fun CharacterListScreenContentPreview() {
         onClick = {}
     )
 
+}
 
+@Preview(showBackground = true, showSystemUi = true, apiLevel = 33)
+@Composable
+private fun ProgressAtBottomCenterPreview() {
+    LoaderForPaging()
 }
 

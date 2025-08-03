@@ -9,6 +9,7 @@ import com.abhi41.anime.domain.models.CharactersResp
 import com.abhi41.anime.domain.repository.AnimeRepository
 import com.abhi41.planet.core_network.dtos.characters.CharactersResponse
 import com.abhi41.planet.core_network.service.ApiService
+import kotlinx.coroutines.delay
 
 class AnimeRepositoryImpl(
     private val apiService: ApiService
@@ -38,6 +39,7 @@ class AnimeRepositoryImpl(
         page: Int
     ): Result<CharactersResp> {
         try {
+            delay(3000L)
             val result = apiService.getAllCharactersByPage(limit = 10, page = page)
             val response = result.toDomainCharecterResp()
             return Result.success(response)
