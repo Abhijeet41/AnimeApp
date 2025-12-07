@@ -113,11 +113,38 @@ class CharactersViewModel @Inject constructor(
         }
 
     }
+
+
+    fun onSearchQueryChanged(query: String) {
+        _uiState.update { it.copy(searchQuery = query) }
+        if (query.length >= 2) {
+            searchCharactersByRace(query)
+        } else {
+            // Clear search results when query is short
+            _uiState.update { it.copy(searchResults = emptyList()) }
+        }
+    }
+
+    fun searchCharactersByRace(query: String){
+        getAllCharactersUseCase.invoke(query = query).onStart {
+            _uiState.update { it.copy(isLoading = true) }
+        }.onEach { result ->
+            result.onSuccess { data ->
+                _uiState.update { it.copy(searchResults = data, isLoading = false, error = "") }
+            }
+            result.onFailure { error ->
+                _uiState.update { it.copy(error = error.message.toString(), isLoading = false) }
+            }
+        }.launchIn(viewModelScope)
+    }
 }
 
 data class CharactersState(
     val isLoading: Boolean = false,
     val characters: List<Character> = emptyList(),
     val charactersUsingPaging: Flow<PagingData<Character>> = emptyFlow(),
+    val searchResults: List<Character> = emptyList(), // <-- for search
+    val searchQuery: String = "",
+    val isSearching: Boolean = false,
     val error: String = ""
 )

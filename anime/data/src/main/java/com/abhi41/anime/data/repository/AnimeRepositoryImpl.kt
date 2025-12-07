@@ -48,5 +48,15 @@ class AnimeRepositoryImpl(
         }
     }
 
+    override suspend fun searchCharactersByRace(query: String): Result<List<Character>> {
+        try {
+            val result = apiService.searchCharactersByRace(race = query)
+            val response = result.toDomainCharecters()
+            return Result.success(response)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
+
 
 }

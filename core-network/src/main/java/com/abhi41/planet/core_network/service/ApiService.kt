@@ -1,6 +1,7 @@
 package com.abhi41.planet.core_network.service
 
 import com.abhi41.planet.core_network.dtos.characters.CharactersResponse
+import com.abhi41.planet.core_network.dtos.characters.CharectorDto
 import com.abhi41.planet.core_network.dtos.charectorDetails.CharectorDetailsResponse
 import com.abhi41.planet.core_network.dtos.planets.Planetresponse
 import retrofit2.http.GET
@@ -33,4 +34,9 @@ interface ApiService {
     suspend fun getPlanetDetails(
         @Path("id") id: Int
     ): Planetresponse
+
+    @GET("api/characters")
+    suspend fun searchCharactersByRace(
+        @Query("race") race: String
+    ): List<CharectorDto>
 }

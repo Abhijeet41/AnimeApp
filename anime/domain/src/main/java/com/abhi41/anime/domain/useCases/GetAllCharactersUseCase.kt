@@ -19,11 +19,16 @@ class GetAllCharactersUseCase @Inject constructor(
     }.flowOn(Dispatchers.IO)
 
     operator fun invoke(page: Int) = flow<Result<CharactersResp>> {
-
         emit(animeRepository.getAllCharactersByPage(limit = 10,page = page))
     }.catch {
         emit(Result.failure(it))
-
     }
+
+    operator fun invoke(query: String) = flow<Result<List<Character>>> {
+        emit(animeRepository.searchCharactersByRace(query = query))
+    }.catch {
+        emit(Result.failure(it))
+    }
+
 
 }

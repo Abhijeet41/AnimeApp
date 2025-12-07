@@ -19,6 +19,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -43,13 +44,14 @@ fun CharacterListScreen(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
 
- /*   LaunchedEffect(Unit) {
-        // viewModel.getAllCharacters()
-        viewModel.getPagedCharacters()
-    }*/
+    /*   LaunchedEffect(Unit) {
+           // viewModel.getAllCharacters()
+           viewModel.getPagedCharacters()
+       }*/
     CharacterListScreenContent(
         modifier = modifier.fillMaxSize(),
         uiState = uiState.value,
+        viewmodel = viewModel,
         onClick = onClick
     )
 
@@ -60,15 +62,24 @@ fun CharacterListScreen(
 fun CharacterListScreenContent(
     modifier: Modifier = Modifier,
     uiState: CharactersState,
+    viewmodel: CharactersViewModel,
     onClick: (Int) -> Unit
 ) {
     val characters = uiState.charactersUsingPaging.collectAsLazyPagingItems()
+    val searchQuery = uiState.searchQuery
 
     Scaffold(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { Text(text = "Anime Characters") },
+                title = {
+                    SearchBar(
+                        query = searchQuery,
+                        onQueryChange = { query ->
+                            viewmodel.onSearchQueryChanged(query)
+                        }
+                    )
+                },
                 modifier = Modifier.background(color = Color.Blue)
             )
         }
@@ -112,52 +123,66 @@ fun CharacterListScreenContent(
             enter = slideInVertically(tween(delayMillis = 1000)) { it } + fadeIn(tween(1000)),
             exit = slideOutVertically(tween(1000)) + fadeOut(tween(1000))
         ) {
-            /*    Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {*/
-            LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Fixed(2),
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
-            ) {
-                items(characters.itemCount) { index ->
-                    characters[index]?.let { character ->
-                        CharacterItem(
-                            character = character,
-                            onClick = onClick
-                        )
+
+            when {
+                uiState.searchQuery.length >= 2 && uiState.searchResults.isNotEmpty() -> {
+                    LazyVerticalStaggeredGrid(
+                        columns = StaggeredGridCells.Fixed(2),
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .fillMaxSize(),
+                    ) {
+                        items(uiState.searchResults.size) { index ->
+                            CharacterItem(character = uiState.searchResults[index], onClick = onClick)
+                        }
                     }
                 }
-                item(span = StaggeredGridItemSpan.FullLine) {
-                    when (characters.loadState.append) {
-                        is LoadState.Error -> Unit
-                        LoadState.Loading ->
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                AnimatedVisibility(
-                                    visible = characters.loadState.append is LoadState.Loading,
-                                    enter = fadeIn(tween(delayMillis = 1000)),
-                                    exit = fadeOut(tween(delayMillis = 1000)),
-                                    modifier = Modifier
-                                        .align(Alignment.BottomCenter) // <-- Important
-                                        .padding(16.dp)
-                                ) {
-                                    LoaderForPaging()
-                                }
+                else -> {
+                    // Show your paging list here
+                    LazyVerticalStaggeredGrid(
+                        columns = StaggeredGridCells.Fixed(2),
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .fillMaxSize(),
+                    ) {
+                        items(characters.itemCount) { index ->
+                            characters[index]?.let { character ->
+                                CharacterItem(
+                                    character = character,
+                                    onClick = onClick
+                                )
                             }
+                        }
+                        item(span = StaggeredGridItemSpan.FullLine) {
+                            when (characters.loadState.append) {
+                                is LoadState.Error -> Unit
+                                LoadState.Loading ->
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        AnimatedVisibility(
+                                            visible = characters.loadState.append is LoadState.Loading,
+                                            enter = fadeIn(tween(delayMillis = 1000)),
+                                            exit = fadeOut(tween(delayMillis = 1000)),
+                                            modifier = Modifier
+                                                .align(Alignment.BottomCenter) // <-- Important
+                                                .padding(16.dp)
+                                        ) {
+                                            LoaderForPaging()
+                                        }
+                                    }
 
-                        is LoadState.NotLoading -> Unit
+                                is LoadState.NotLoading -> Unit
+                            }
+                        }
+
                     }
                 }
-
             }
 
-            // }
+
 
         }
         /*AnimatedVisibility(
@@ -202,6 +227,21 @@ private fun LoaderForPaging() {
     )
 }
 
+@Composable
+fun SearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit
+) {
+    androidx.compose.material3.TextField(
+        value = query,
+        onValueChange = { onQueryChange(it) },
+        placeholder = { Text("Search characters...") },
+        singleLine = true,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 8.dp, end = 8.dp)
+    )
+}
 
 @Preview(showBackground = true, showSystemUi = true, apiLevel = 33)
 @Composable
