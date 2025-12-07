@@ -1,6 +1,6 @@
-## AnimeApp
+ ## AnimeApp
 
-A multi‑module Jetpack Compose Android application following Clean Architecture and Single Source of Truth principle.
+A Features with Layerwise multi‑module Jetpack Compose Android application following Clean Architecture and Single Source of Truth principle.
 Features Room Database + Paging 3 for offline‑first data loading and Hilt for dependency injection.
 
 ```
