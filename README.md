@@ -7,41 +7,55 @@ Features Room Database + Paging 3 for offline‑first data loading and Hilt for 
 AnimeApp/
 │
 ├── app/                      # Main application module (navigation, DI entry point)
+│   ├── src/main/java/com/abhi41/animeapp/
+│   │   ├── BaseApplication.kt
+│   │   ├── MainActivity.kt
+│   │   ├── navigation/       # Navigation graphs (AnimeNavGraph, PlanetNavGraph, BaseNavGraph)
+│   │   └── ui/theme/         # Material 3 theme, Color, Type
 │
-├── core-network/             # Shared network module (Retrofit, OkHttp, API setup)
+├── core-network/             # Shared network module (Retrofit, OkHttp, DTOs, ApiService)
+│   ├── src/main/java/com/abhi41/planet/core_network/
+│   │   ├── di/               # NetworkModule (Retrofit instance, OkHttpClient)
+│   │   ├── dtos/             # API Data Transfer Objects (Characters, Details, Planets)
+│   │   └── service/          # ApiService interface
 │
 ├── anime/                    # Feature module: Anime
-│   ├── data/                 # Data layer (Room, RemoteMediator, Repository)
-│   │   ├── di/               # Hilt modules for DB, Repo, UseCases
-│   │   ├── local/            # Room database (Entity, DAO, Database)
-│   │   ├── mappers/          # Entity ↔ Domain mappers
-│   │   ├── remote/           # Retrofit API + Paging RemoteMediator
-│   │   └── repository/       # Repository implementation
-│   │
-│   ├── domain/               # Domain layer (Business logic)
-│   │   ├── models/           # Domain models
-│   │   ├── repository/       # Repository interfaces
-│   │   └── useCases/         # Use cases (e.g., GetPagedAnimeUseCase)
-│   │
-│   └── presentation/         # Presentation layer (Jetpack Compose screens)
-│       ├── characters/       # Anime list screen
-│       ├── character_details/# Anime detail screen
-│       ├── components/       # Reusable Compose components
+│   ├── data/                 # Data layer (Repository impl, mappers, DI)
+│   │   ├── src/main/java/com/abhi41/anime/data/
+│   │   │   ├── di/           # AnimeDataModule
+│   │   │   ├── mappers/      # Data ↔ Domain mappers
+│   │   │   └── repository/   # AnimeRepositoryImpl
+│   │   │
+│   ├── domain/               # Domain layer (Business logic, models, use cases, paging)
+│   │   ├── src/main/java/com/abhi41/anime/domain/
+│   │   │   ├── di/
+│   │   │   ├── models/       # Character, CharacterDetails, CharactersResp, etc.
+│   │   │   ├── paging/       # AnimeDataSource
+│   │   │   ├── repository/   # AnimeRepository interface
+│   │   │   └── useCases/     # GetAllCharactersUseCase, GetCharactersDetailsUseCase
+│   │   │
+│   └── presentation/         # Presentation layer (Jetpack Compose screens & viewmodels)
+│       ├── src/main/java/com/abhi41/anime/presentation/
+│       │   ├── character_details/ # CharacterDetailScreen, CharacterDetailViewModel
+│       │   ├── characters/        # CharactersListScreen, CharactersViewModel
+│       │   └── components/        # Reusable UI components (CharacterItem)
 │
-├── planet/                   # Feature module: Planet (similar clean structure)
-│   ├── data/
-│   │   ├── di/
-│   │   ├── mappers/
-│   │   ├── remote/
-│   │   └── repository/
-│   │
-│   ├── domain/
-│   │   ├── model/
-│   │   ├── repository/
-│   │   └── useCases/
-│   │
-│   └── presentation/
-│       └── planetInfo/       # Screens + ViewModels for planet feature
+└── planet/                   # Feature module: Planet (Clean Architecture)
+    ├── data/                 # Data layer
+    │   ├── src/main/java/com/abhi41/planet/data/
+    │   │   ├── di/           # PlanetModule
+    │   │   ├── mappers/      # Mappers
+    │   │   └── repository/   # PlanetRepositoryImpl
+    │   │
+    ├── domain/               # Domain layer
+    │   ├── src/main/java/com/abhi41/planet/domain/
+    │   │   ├── model/        # Character, PlanetInfoWithCharacters
+    │   │   ├── repository/   # PlanetRepository interface
+    │   │   └── useCases/     # GetPlanetInfoCharactersUseCase
+    │   │
+    └── presentation/         # Presentation layer
+        └── src/main/java/com/abhi41/planet/presentation/
+            └── planetInfo/   # PlanetInfoCharacterScreen, PlanetInfoViewModel
 
 ```
 
